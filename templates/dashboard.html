@@ -1,0 +1,113 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">Student Performance Dashboard</h2>
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h6>Total Students</h6>
+            <h2>{{ total }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h6>Average Marks</h6>
+            <h2>{{ average }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h6>Passed</h6>
+            <h2 class="text-success">{{ passed }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <h6>Failed</h6>
+            <h2 class="text-danger">{{ failed }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<div class="card p-4">
+
+    <div class="d-flex justify-content-between mb-3">
+        <h4>Student Records</h4>
+
+        <form action="/search" method="GET" class="d-flex">
+            <input name="q" class="form-control"
+                   placeholder="Search student">
+
+            <button class="btn btn-primary ms-2">Search</button>
+        </form>
+    </div>
+
+    <table class="table table-hover">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Marks</th>
+                <th>Result</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for s in students %}
+
+            <tr>
+                <td>{{ s.id }}</td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.department }}</td>
+                <td>{{ s.marks }}</td>
+
+                <td>
+                    {% if s.marks >= 40 %}
+                        <span class="badge bg-success">Pass</span>
+                    {% else %}
+                        <span class="badge bg-danger">Fail</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="/edit/{{ s.id }}"
+                       class="btn btn-warning btn-sm">Edit</a>
+
+                    <form action="/delete/{{ s.id }}"
+                          method="POST" style="display:inline"
+                          onsubmit="return confirm('Delete student?')">
+
+                        <button class="btn btn-danger btn-sm">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+        {% else %}
+            <tr>
+                <td colspan="6" class="text-center">
+                    No students found.
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card p-4">
+
+    <h3>
+        {% if student %}Edit Student{% else %}Add Student{% endif %}
+    </h3>
+
+    <form method="POST">
+
+        <label class="form-label">Student Name</label>
+        <input type="text" name="name"
+               value="{{ student.name if student else '' }}"
+               class="form-control mb-3" required>
+
+        <label class="form-label">Department</label>
+        <select name="department" class="form-select mb-3" required>
+            <option value="">Select Department</option>
+
+            {% for d in ['Biotechnology', 'Computer Science',
+                         'Mechanical', 'Electronics', 'Civil'] %}
+                <option value="{{ d }}"
+                    {% if student and student.department == d %}
+                        selected
+                    {% endif %}>
+                    {{ d }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label class="form-label">Marks</label>
+        <input type="number" name="marks"
+               value="{{ student.marks if student else '' }}"
+               min="0" max="100" step="0.01"
+               class="form-control mb-3" required>
+
+        <button class="btn btn-primary">
+            {% if student %}Update Student{% else %}Save Student{% endif %}
+        </button>
+
+        <a href="/" class="btn btn-secondary">Back</a>
+
+    </form>
+
+</div>
+
+{% endblock %}
